@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pink Flowers</title>
+
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #020607;
+    }
+
+.garden {
+      position: relative;
+      width: min(100vw, 700px);
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 45%, #29102455, transparent 55%),
+        linear-gradient(#0b171a, #020606 75%, #000);
+    }
+
+svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+.plant {
+      transform-box: view-box;
+      transform-origin: 300px 650px;
+      animation: sway 5s ease-in-out infinite alternate;
+    }
+
+.plant.left {
+      animation-delay: -2s;
+      animation-duration: 4.5s;
+    }
+
+.plant.right {
+      animation-delay: -3s;
+      animation-duration: 5.5s;
+    }
+
+.stem {
+      fill: none;
+      stroke: url(#stemGradient);
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-dasharray: 550;
+      stroke-dashoffset: 550;
+      animation: grow-stem 2.5s ease-out forwards;
+    }
+
+.bloom {
+      transform-box: fill-box;
+      transform-origin: center bottom;
+      animation: bloom 1.8s cubic-bezier(.2, .8, .3, 1.2) both;
+      animation-delay: var(--delay, 1.5s);
+    }
+
+.foliage {
+      opacity: 0;
+      animation: appear 2s ease-out 1s forwards;
+    }
+
+.grass {
+      transform-box: view-box;
+      transform-origin: 300px 680px;
+      animation: grass-sway 4s ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+    }
+
+.star {
+      fill: #a6d7db;
+      animation: twinkle var(--duration) ease-in-out infinite alternate;
+      animation-delay: var(--delay);
+    }
+
+.firefly {
+      opacity: 0;
+      filter: url(#glow);
+      animation: float-up var(--duration) linear infinite;
+      animation-delay: var(--delay);
+    }
+
+.ground {
+      position: absolute;
+      inset: auto 0 0;
+      height: 12%;
+      background: linear-gradient(transparent, #000);
+      pointer-events: none;
+    }
+
+@keyframes grow-stem {
+      to { stroke-dashoffset: 0; }
+    }
+
+@keyframes bloom {
+      from {
+        opacity: 0;
+        transform: scale(.05) rotate(-15deg);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+    }
+
+@keyframes appear {
+      to { opacity: 1; }
+    }
+
+@keyframes sway {
+      from { transform: rotate(-2deg); }
+      to { transform: rotate(2deg); }
+    }
+
+@keyframes grass-sway {
+      from { transform: skewX(-2deg); }
+      to { transform: skewX(3deg); }
+    }
+
+@keyframes twinkle {
+      from { opacity: .1; }
+      to { opacity: .65; }
+    }
+
+@keyframes float-up {
+      0% {
+        opacity: 0;
+        transform: translate(0, 15px);
+      }
+      20%, 65% { opacity: .9; }
+      100% {
+        opacity: 0;
+        transform: translate(25px, -150px);
+      }
+    }
+
+@media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+      }
+
+.stem { stroke-dashoffset: 0; }
+      .foliage, .bloom { opacity: 1; }
+      .firefly { opacity: .5; }
+      .star { opacity: .3; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="garden">
+    <svg
+      viewBox="0 0 600 700"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Three blooming pink flowers swaying in a glowing night garden"
+    >
+      <defs>
+        <linearGradient id="petalGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ff62bd"/>
+          <stop offset="45%" stop-color="#ee168c"/>
+          <stop offset="100%" stop-color="#97094f"/>
+        </linearGradient>
+
+<linearGradient id="leafGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ff299c"/>
+          <stop offset="55%" stop-color="#a41464"/>
+          <stop offset="100%" stop-color="#102325"/>
+        </linearGradient>
+
+<linearGradient id="stemGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff49a8"/>
+          <stop offset="60%" stop-color="#b8196d"/>
+          <stop offset="100%" stop-color="#183027"/>
+        </linearGradient>
+
+<linearGradient id="grassGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#58d954"/>
+          <stop offset="50%" stop-color="#207a32"/>
+          <stop offset="100%" stop-color="#03130d"/>
+        </linearGradient>
+
+<radialGradient id="halo">
+          <stop offset="0%" stop-color="#f7259822"/>
+          <stop offset="100%" stop-color="#f7259800"/>
+        </radialGradient>
+
+<filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="2"/>
+        </filter>
+
+<!-- A leaf extending upward and to the right. -->
+        <path id="leaf"
+          d="M0 0 C-9 -25 9 -51 34 -58 C40 -30 28 -8 0 0Z"
+          fill="url(#leafGradient)"/>
+
+<!-- Reusable flower head, centered at the tip of a stem. -->
+        <g id="flower">
+          <ellipse cy="-15" rx="65" ry="52" fill="url(#halo)"/>
+
+<path
+            d="M0 0 C-23 -13 -32 -57 -10 -65
+               C20 -77 35 -44 12 -5Z"
+            fill="url(#petalGradient)"
+            stroke="#ff83cd" stroke-opacity=".3"/>
+
+<path
+            d="M-1 0 C-27 0 -70 -23 -69 -44
+               C-65 -63 -20 -43 4 -9Z"
+            fill="url(#petalGradient)"
+            stroke="#ff83cd" stroke-opacity=".3"/>
+
+<path
+            d="M1 0 C30 -1 70 -25 67 -47
+               C59 -63 23 -41 -5 -7Z"
+            fill="url(#petalGradient)"
+            stroke="#ff83cd" stroke-opacity=".3"/>
+
+<ellipse cy="-4" rx="29" ry="11" fill="#fff1fb"/>
+          <ellipse cy="-1" rx="24" ry="7" fill="#ffd449"/>
+
+<path
+            d="M-32 -1 Q0 10 32 -1 Q22 20 0 16 Q-24 13 -32 -1"
+            fill="#f52b98"/>
+        </g>
+      </defs>
+
+<g id="stars"></g>
+
+<ellipse cx="310" cy="370" rx="235" ry="270" fill="url(#halo)"/>
+
+<g id="back-grass"></g>
+      <g id="bush" class="foliage"></g>
+
+<!-- Left flower -->
+      <g class="plant left">
+        <path class="stem" d="M300 650 Q245 480 190 330"/>
+        <g class="foliage">
+          <use href="#leaf" transform="translate(258 524) rotate(-75) scale(1.05)"/>
+          <use href="#leaf" transform="translate(239 468) rotate(5) scale(.9)"/>
+          <use href="#leaf" transform="translate(222 418) rotate(-80) scale(.85)"/>
+        </g>
+        <g transform="translate(190 330) rotate(-15)">
+          <g class="bloom" style="--delay: 1.7s">
+            <use href="#flower"/>
+          </g>
+        </g>
+      </g>
+
+<!-- Tall center flower -->
+      <g class="plant">
+        <path class="stem" d="M305 650 Q305 415 300 205"/>
+        <g class="foliage">
+          <use href="#leaf" transform="translate(304 480) rotate(-65) scale(1.15)"/>
+          <use href="#leaf" transform="translate(303 411) rotate(10) scale(1.05)"/>
+          <use href="#leaf" transform="translate(302 350) rotate(-65) scale(.95)"/>
+          <use href="#leaf" transform="translate(301 291) rotate(5) scale(.7)"/>
+          <use href="#leaf" transform="translate(300 251) rotate(-60) scale(.5)"/>
+        </g>
+        <g transform="translate(300 205)">
+          <g class="bloom" style="--delay: 2s">
+            <use href="#flower"/>
+          </g>
+        </g>
+      </g>
+
+<!-- Right flower -->
+      <g class="plant right">
+        <path class="stem" d="M310 650 Q365 448 412 290"/>
+        <g class="foliage">
+          <use href="#leaf" transform="translate(340 535) rotate(20) scale(1.15)"/>
+          <use href="#leaf" transform="translate(359 465) rotate(-70)"/>
+          <use href="#leaf" transform="translate(377 409) rotate(20) scale(.95)"/>
+          <use href="#leaf" transform="translate(394 351) rotate(-60) scale(.85)"/>
+        </g>
+        <g transform="translate(412 290) rotate(17)">
+          <g class="bloom" style="--delay: 2.3s">
+            <use href="#flower"/>
+          </g>
+        </g>
+      </g>
+
+<g id="front-grass"></g>
+      <g id="fireflies"></g>
+    </svg>
+
+<div class="ground"></div>
+  </main>
+
+<script>
+    const NS = "http://www.w3.org/2000/svg";
+
+function createSVG(tag, attributes, parent) {
+      const element = document.createElementNS(NS, tag);
+
+for (const [key, value] of Object.entries(attributes)) {
+        element.setAttribute(key, value);
+      }
+
+parent.appendChild(element);
+      return element;
+    }
+
+// Seeded randomness keeps the arrangement consistent on reload.
+    let seed = 18;
+
+function random() {
+      seed = (seed * 16807) % 2147483647;
+      return (seed - 1) / 2147483646;
+    }
+
+const stars = document.querySelector("#stars");
+
+for (let i = 0; i < 85; i++) {
+      createSVG("circle", {
+        cx: random() * 600,
+        cy: random() * 580,
+        r: .4 + random() * 1.1,
+        class: "star",
+        style: `--duration:${2 + random() * 4}s;--delay:-${random() * 6}s`
+      }, stars);
+    }
+
+function grassBlade(parent, x, y, height, lean, width, delay) {
+      createSVG("path", {
+        d: `M ${x} ${y}
+            Q ${x + lean * .3} ${y - height * .72}
+              ${x + lean} ${y - height}
+            Q ${x + lean * .55} ${y - height * .77}
+              ${x + width} ${y} Z`,
+        fill: "url(#grassGradient)",
+        class: "grass",
+        style: `--delay:-${delay}s`
+      }, parent);
+    }
+
+const backGrass = document.querySelector("#back-grass");
+
+// Tall grass framing the flowers.
+    [
+      [95, 650, 470, 30, 9],
+      [105, 665, 330, -64, 11],
+      [115, 665, 320, 75, 10],
+      [82, 660, 240, -42, 9],
+      [478, 670, 345, 38, 10],
+      [490, 670, 290, 68, 11],
+      [470, 665, 255, -55, 8],
+      [500, 675, 185, 80, 10]
+    ].forEach(blade => grassBlade(backGrass, ...blade, random() * 5));
+
+// Pink leafy branches near the base.
+    const bush = document.querySelector("#bush");
+
+for (let branch = 0; branch < 7; branch++) {
+      const direction = branch < 4 ? -1 : 1;
+      const baseX = 300 + (random() - .5) * 60;
+      const tipX = baseX + direction * (75 + random() * 100);
+      const tipY = 445 + random() * 115;
+
+createSVG("path", {
+        d: `M${baseX} 665 Q${baseX + direction * 35} ${tipY + 25} ${tipX} ${tipY}`,
+        fill: "none",
+        stroke: "url(#stemGradient)",
+        "stroke-width": 3
+      }, bush);
+
+for (let j = 1; j <= 5; j++) {
+        const t = j / 6;
+        const controlX = baseX + direction * 35;
+        const x = (1 - t) ** 2 * baseX
+          + 2 * (1 - t) * t * controlX + t * t * tipX;
+        const y = (1 - t) ** 2 * 665
+          + 2 * (1 - t) * t * (tipY + 25) + t * t * tipY;
+        const scale = 1.05 - t * .45;
+        const angle = j % 2 ? direction * 65 : direction * -15;
+
+createSVG("use", {
+          href: "#leaf",
+          transform: `translate(${x} ${y}) rotate(${angle}) scale(${scale})`
+        }, bush);
+      }
+    }
+
+const frontGrass = document.querySelector("#front-grass");
+
+for (let i = 0; i < 22; i++) {
+      grassBlade(
+        frontGrass,
+        65 + random() * 475,
+        695,
+        35 + random() * 125,
+        (random() - .5) * 105,
+        4 + random() * 5,
+        random() * 5
+      );
+    }
+
+const fireflies = document.querySelector("#fireflies");
+
+for (let i = 0; i < 28; i++) {
+      createSVG("circle", {
+        cx: 130 + random() * 345,
+        cy: 200 + random() * 410,
+        r: 1.4 + random() * 1.7,
+        fill: i % 3 === 0 ? "#fff15b" : "#ff299c",
+        class: "firefly",
+        style: `--duration:${4 + random() * 5}s;--delay:-${random() * 10}s`
+      }, fireflies);
+    }
+  </script>
+</body>
+</html>
